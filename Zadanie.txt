@@ -1,0 +1,5 @@
+Stanislaw Kozdrowski, email: S.Kozdrowski@elka.pw.edu.pl
+Description
+
+{Zaimplementować i przetesotować algorytm A ∗ dla zadania znalezienia ścieżki o najmniejszej wadze od punktu A do B. Wejściem aplikacji jest plik z listą krawędzi grafu (dla każdej krawędzi zdefiniowany jest punkt początkowy, końcowy I waga krawędzi). Wyjściem aplikacji jest najkrótsza ścieżka od punktu A do punktu B. Porównać działanie algorytmu A ∗ z ”brutalnym” przeszukiwaniem grafu. Zastosowanie dodatkowego algorytmu będzie dodatkowym atutem przy ocenie projektu.}
+
