@@ -4,7 +4,7 @@ class Wierzchołek:
         self.sąsiedzi = list(sąsiedzi)
         
     def dodaj_sąsiada(self, id_celu, koszt):
-        self.sąsiedzi.append((id_celu, koszt))
+        self.sąsiedzi.append((id_celu, float(koszt)))
 
 class Graf:
     def __init__(self, wierzchołki={}):
