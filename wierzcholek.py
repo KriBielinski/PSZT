@@ -7,7 +7,6 @@ class Wierzchołek:
         self.sąsiedzi = sąsiedzi
 
 class Graf:
-    def __init__(self, wierzchołki=[]):
-        # lista wierzchołków w grafie
+    def __init__(self, wierzchołki={}):
+        # słownik wierzchołków w grafie '{id -> Wierzchołek}'
         self.wierzchołki = wierzchołki
-        
