@@ -8,4 +8,6 @@ class Wierzchołek:
 
 class Graf:
     def __init__(self, wierzchołki=[]):
+        # lista wierzchołków w grafie
         self.wierzchołki = wierzchołki
+        
