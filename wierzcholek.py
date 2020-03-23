@@ -39,7 +39,7 @@ class Graf:
                 self.krawędzieMalejąco.append((float)(koszt))
 
             self.dodaj_wierzchołek(id_swoje, id_celu, koszt)
-
+            
         self.krawędzieMalejąco.sort(reverse=True)
         plik.close()
 
