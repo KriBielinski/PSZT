@@ -20,7 +20,6 @@ class Graf:
         if id_swoje not in self.wierzchołki:
             self.wierzchołki[id_swoje] = Wierzchołek()
         self.wierzchołki[id_swoje].dodaj_sąsiada(id_celu, koszt)
-
         if id_celu not in self.wierzchołki:
             self.wierzchołki[id_celu] = Wierzchołek()
         self.wierzchołki[id_celu].dodaj_sąsiada(id_swoje, koszt)
