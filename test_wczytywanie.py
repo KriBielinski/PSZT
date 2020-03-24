@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from wierzcholek import Wierzchołek, Graf
+from wierzcholek import Graf
 
 graf = Graf()
 graf.czytaj_plik("wejscie.txt")
@@ -12,4 +12,4 @@ assert graf.wierzchołki.get('4').sąsiedzi == [('2',5), ('3',3), ('5',1)]
 assert graf.wierzchołki.get('5').sąsiedzi == [('4',1), ('3',2), ('6',4)]
 assert graf.wierzchołki.get('6').sąsiedzi == [('5',4), ('3',4), ('1',3)]
 
-assert graf.krawędzieMalejąco == [5, 4, 4, 4, 3, 3, 3, 2, 2, 1]
+assert graf.krawędzie_malejąco == [5, 4, 4, 4, 3, 3, 3, 2, 2, 1]
