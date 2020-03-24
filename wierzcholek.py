@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-maxZapamiętanychKrawędzi = 100
+max_zapamiętanych_krawędzi = 100
 
 class Wierzchołek:
     def __init__(self, sąsiedzi=[]):
@@ -14,7 +14,7 @@ class Wierzchołek:
 class Graf:
     def __init__(self, wierzchołki={}):
         self.wierzchołki = dict(wierzchołki)
-        self.krawędzieMalejąco = list()
+        self.krawędzie_malejąco = list()
         
     def dodaj_wierzchołek(self, id_swoje, id_celu=None, koszt=None):
         if id_swoje not in self.wierzchołki:
@@ -34,16 +34,16 @@ class Graf:
             id_celu = linia[1]
             koszt = linia[2]
 
-            if(len(self.krawędzieMalejąco) < maxZapamiętanychKrawędzi):
-                self.krawędzieMalejąco.append((float)(koszt))
+            if(len(self.krawędzie_malejąco) < max_zapamiętanych_krawędzi):
+                self.krawędzie_malejąco.append((float)(koszt))
 
             self.dodaj_wierzchołek(id_swoje, id_celu, koszt)
             
-        self.krawędzieMalejąco.sort(reverse=True)
+        self.krawędzie_malejąco.sort(reverse=True)
         plik.close()
 
     def oblicz_heurystykę(self, id_celu):
-        aktualnaHeurystyka = 0
+        aktualna_heurystyka = 0
 
         odwiedzone = dict()
         for id in self.wierzchołki.keys():
@@ -54,17 +54,65 @@ class Graf:
         odwiedzone[id_celu] = True
 
         while(len(wierzchołki) > 0):
-            wierzchołkiNaNastępnymPoziomie = list()
+            wierzchołki_na_następnym_poziomie = list()
 
             for id in wierzchołki:
-                self.wierzchołki.get(id).heurystyka = aktualnaHeurystyka
+                self.wierzchołki.get(id).heurystyka = aktualna_heurystyka
                 for (sąsiad, koszt) in self.wierzchołki.get(id).sąsiedzi:
                     if(odwiedzone[sąsiad] == False):
-                        wierzchołkiNaNastępnymPoziomie.append(sąsiad)
+                        wierzchołki_na_następnym_poziomie.append(sąsiad)
                         odwiedzone[sąsiad] = True
 
-            wierzchołki = wierzchołkiNaNastępnymPoziomie
+            wierzchołki = wierzchołki_na_następnym_poziomie
 
-            aktualnaHeurystyka += self.krawędzieMalejąco[-1]
-            if(len(self.krawędzieMalejąco) > 1):
-                self.krawędzieMalejąco.pop(-1)
+            aktualna_heurystyka += self.krawędzie_malejąco[-1]
+            if(len(self.krawędzie_malejąco) > 1):
+                self.krawędzie_malejąco.pop(-1)
+
+    def a_star(self, id_start, id_celu):
+        self.oblicz_heurystykę(id_celu)
+
+        id_wierzchołków_do_sprawdzenia = [id_start]
+        id_poprzednika = dict()
+
+        koszt_ze_startu = dict()
+        for id_wierzchołka in self.wierzchołki.keys():
+            koszt_ze_startu[id_wierzchołka] = float("inf")
+            
+        koszt_ze_startu[id_start] = 0
+
+        koszt_do_celu = dict()
+        for id_wierzchołka, wierzchołek in self.wierzchołki.items():
+            koszt_do_celu[id_wierzchołka] = wierzchołek.heurystyka
+        
+        while(len(id_wierzchołków_do_sprawdzenia) != 0):
+            id_aktualnego = id_wierzchołków_do_sprawdzenia[0]
+
+            for i in range(1, len(id_wierzchołków_do_sprawdzenia)):
+                if koszt_do_celu[id_wierzchołków_do_sprawdzenia[i]] < koszt_do_celu[id_aktualnego]:
+                    id_aktualnego = id_wierzchołków_do_sprawdzenia[i]
+
+            if id_aktualnego == id_celu:
+                return self.ścieżka(id_poprzednika, id_aktualnego)
+            
+            id_wierzchołków_do_sprawdzenia.remove(id_aktualnego)
+
+            for (sąsiad, koszt) in self.wierzchołki.get(id_aktualnego).sąsiedzi:
+                możliwy_koszt_ze_startu = koszt_ze_startu[id_aktualnego] + koszt
+
+                if możliwy_koszt_ze_startu < koszt_ze_startu[sąsiad]:
+                    id_poprzednika[sąsiad] = id_aktualnego
+                    koszt_ze_startu[sąsiad] = możliwy_koszt_ze_startu
+                    koszt_do_celu[sąsiad] = koszt_ze_startu[sąsiad] + self.wierzchołki.get(sąsiad).heurystyka
+
+                    if sąsiad not in id_wierzchołków_do_sprawdzenia:
+                        id_wierzchołków_do_sprawdzenia.append(sąsiad)
+
+        return list()
+
+    def ścieżka(self, id_poprzednika, id_celu):
+        odp = [id_celu]
+        while(id_celu in id_poprzednika.keys()):
+            id_celu = id_poprzednika[id_celu]
+            odp.insert(0, id_celu)
+        return odp
