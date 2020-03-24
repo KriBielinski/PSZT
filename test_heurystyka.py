@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from wierzcholek import Wierzchołek, Graf
+from wierzcholek import Graf
 
 graf = Graf()
 graf.czytaj_plik("wejscie.txt")
