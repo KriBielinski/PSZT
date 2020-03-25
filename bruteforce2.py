@@ -46,5 +46,7 @@ def bruteforce2(graf, id_startowe, id_celowe):
     
     przeszukaj_sąsiadów(id_startowe, None, 0)
     
-    print('Ścieżka: ', lista_id(ścieżki[koszty.index(min(koszty))]))
-    print('Koszt: ', min(koszty))
+    #print('Ścieżka: ', lista_id(ścieżki[koszty.index(min(koszty))]))
+    #print('Koszt: ', min(koszty))
+    
+    return lista_id(ścieżki[koszty.index(min(koszty))])
