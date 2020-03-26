@@ -20,6 +20,7 @@ class Graf:
         if id_swoje not in self.wierzchołki:
             self.wierzchołki[id_swoje] = Wierzchołek()
         self.wierzchołki[id_swoje].dodaj_sąsiada(id_celu, koszt)
+
         if id_celu not in self.wierzchołki:
             self.wierzchołki[id_celu] = Wierzchołek()
         self.wierzchołki[id_celu].dodaj_sąsiada(id_swoje, koszt)
@@ -69,9 +70,18 @@ class Graf:
             if(len(self.krawędzie_malejąco) > 1):
                 self.krawędzie_malejąco.pop(-1)
 
+    def wyzeruj_heurystykę(self):
+        for wierzchołek in self.wierzchołki.values():
+            wierzchołek.heurystyka = 0
+
     def a_star(self, id_start, id_celu):
         self.oblicz_heurystykę(id_celu)
+        return self.algorytm(id_start, id_celu)
 
+    def dijkstra(self, id_start, id_celu):
+        return self.algorytm(id_start, id_celu)
+
+    def algorytm(self, id_start, id_celu):
         id_wierzchołków_do_sprawdzenia = [id_start]
         id_poprzednika = dict()
 
