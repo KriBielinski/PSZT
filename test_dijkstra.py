@@ -6,7 +6,6 @@ from wierzcholek import Graf
 def test_dijkstra():
     graf = Graf()
     graf.czytaj_plik("wejscie.txt")
-    graf.wyzeruj_heurystykę()
 
     assert graf.dijkstra('1', '2') == ['1','2']
     assert graf.dijkstra('1', '3') == ['1','3']

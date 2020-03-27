@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-max_zapamiętanych_krawędzi = 100
-
 class Wierzchołek:
     def __init__(self, sąsiedzi=[]):
         self.sąsiedzi = list(sąsiedzi)
-        self.heurystyka = -1
+        self.heurystyka = 0
         
     def dodaj_sąsiada(self, id_celu, koszt):
         self.sąsiedzi.append((id_celu, float(koszt)))
@@ -35,9 +33,7 @@ class Graf:
             id_celu = linia[1]
             koszt = linia[2]
 
-            if(len(self.krawędzie_malejąco) < max_zapamiętanych_krawędzi):
-                self.krawędzie_malejąco.append((float)(koszt))
-
+            self.krawędzie_malejąco.append((float)(koszt))
             self.dodaj_wierzchołek(id_swoje, id_celu, koszt)
             
         self.krawędzie_malejąco.sort(reverse=True)
@@ -70,12 +66,7 @@ class Graf:
             if(len(self.krawędzie_malejąco) > 1):
                 self.krawędzie_malejąco.pop(-1)
 
-    def wyzeruj_heurystykę(self):
-        for wierzchołek in self.wierzchołki.values():
-            wierzchołek.heurystyka = 0
-
     def a_star(self, id_start, id_celu):
-        self.oblicz_heurystykę(id_celu)
         return self.algorytm(id_start, id_celu)
 
     def dijkstra(self, id_start, id_celu):
