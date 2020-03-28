@@ -85,6 +85,8 @@ class Graf:
         koszt_do_celu = dict()
         for id_wierzchołka, wierzchołek in self.wierzchołki.items():
             koszt_do_celu[id_wierzchołka] = wierzchołek.heurystyka
+
+        odwiedzonych_wierzchołków = 0
         
         while(len(id_wierzchołków_do_sprawdzenia) != 0):
             id_aktualnego = id_wierzchołków_do_sprawdzenia[0]
@@ -93,8 +95,10 @@ class Graf:
                 if koszt_do_celu[id_wierzchołków_do_sprawdzenia[i]] < koszt_do_celu[id_aktualnego]:
                     id_aktualnego = id_wierzchołków_do_sprawdzenia[i]
 
+            odwiedzonych_wierzchołków += 1
+
             if id_aktualnego == id_celu:
-                return self.ścieżka(id_poprzednika, id_aktualnego)
+                return self.ścieżka(id_poprzednika, id_aktualnego), koszt_ze_startu[id_celu], odwiedzonych_wierzchołków
             
             id_wierzchołków_do_sprawdzenia.remove(id_aktualnego)
 
@@ -109,7 +113,7 @@ class Graf:
                     if sąsiad not in id_wierzchołków_do_sprawdzenia:
                         id_wierzchołków_do_sprawdzenia.append(sąsiad)
 
-        return list()
+        return list(), -1, odwiedzonych_wierzchołków
 
     def ścieżka(self, id_poprzednika, id_celu):
         odp = [id_celu]
