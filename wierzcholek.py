@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from time import perf_counter
+
 class Wierzchołek:
     def __init__(self, sąsiedzi=[]):
         self.sąsiedzi = list(sąsiedzi)
@@ -67,12 +69,15 @@ class Graf:
                 self.krawędzie_malejąco.pop(-1)
 
     def a_star(self, id_start, id_celu):
+        self.oblicz_heurystykę(id_celu)
         return self.algorytm(id_start, id_celu)
 
     def dijkstra(self, id_start, id_celu):
         return self.algorytm(id_start, id_celu)
 
     def algorytm(self, id_start, id_celu):
+        start = perf_counter()
+
         id_wierzchołków_do_sprawdzenia = [id_start]
         id_poprzednika = dict()
 
@@ -97,8 +102,8 @@ class Graf:
 
             odwiedzonych_wierzchołków += 1
 
-            if id_aktualnego == id_celu:
-                return self.ścieżka(id_poprzednika, id_aktualnego), koszt_ze_startu[id_celu], odwiedzonych_wierzchołków
+            if id_aktualnego == id_celu or perf_counter() - start > 60:
+                return self.ścieżka(id_poprzednika, id_aktualnego), koszt_ze_startu[id_celu], odwiedzonych_wierzchołków, perf_counter() - start
             
             id_wierzchołków_do_sprawdzenia.remove(id_aktualnego)
 
@@ -113,7 +118,7 @@ class Graf:
                     if sąsiad not in id_wierzchołków_do_sprawdzenia:
                         id_wierzchołków_do_sprawdzenia.append(sąsiad)
 
-        return list(), -1, odwiedzonych_wierzchołków
+        return list(), -1, odwiedzonych_wierzchołków, perf_counter() - start
 
     def ścieżka(self, id_poprzednika, id_celu):
         odp = [id_celu]

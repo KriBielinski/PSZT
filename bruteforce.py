@@ -6,6 +6,8 @@ Created on Tue Mar 24 01:18:23 2020
 @author: kristofer
 """
 
+from time import perf_counter
+
 def bruteforce(graf, id_startowe, id_celowe):
     # lista odwiedzonych już wierzchołków
     odwiedzone = []
@@ -14,12 +16,19 @@ def bruteforce(graf, id_startowe, id_celowe):
     
     ścieżki = []
     koszty = []
+
+    odwiedzonych = 0
+    start = perf_counter()
     
     def przeszukaj_sąsiadów(id_obecne, odwiedzone, koszt):
         odwiedzone = list(odwiedzone)
         odwiedzone.append(id_obecne)
+
+        nonlocal start
+        nonlocal odwiedzonych 
+        odwiedzonych += 1
         
-        if id_obecne == id_celowe:
+        if id_obecne == id_celowe or perf_counter() - start >= 60:
             nonlocal ścieżki
             nonlocal koszty
             ścieżki.append(odwiedzone)
@@ -38,4 +47,4 @@ def bruteforce(graf, id_startowe, id_celowe):
     #print('Ścieżka: ', ścieżki[koszty.index(min(koszty))])
     #print('Koszt: ', min(koszty))
     
-    return ścieżki[koszty.index(min(koszty))]
+    return ścieżki[koszty.index(min(koszty))], min(koszty), odwiedzonych, perf_counter() - start
