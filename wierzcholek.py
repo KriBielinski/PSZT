@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-max_zapamiętanych_krawędzi = 100
+from time import perf_counter
 
 class Wierzchołek:
     def __init__(self, sąsiedzi=[]):
         self.sąsiedzi = list(sąsiedzi)
-        self.heurystyka = -1
+        self.heurystyka = 0
         
     def dodaj_sąsiada(self, id_celu, koszt):
         self.sąsiedzi.append((id_celu, float(koszt)))
@@ -35,9 +35,7 @@ class Graf:
             id_celu = linia[1]
             koszt = linia[2]
 
-            if(len(self.krawędzie_malejąco) < max_zapamiętanych_krawędzi):
-                self.krawędzie_malejąco.append((float)(koszt))
-
+            self.krawędzie_malejąco.append((float)(koszt))
             self.dodaj_wierzchołek(id_swoje, id_celu, koszt)
             
         self.krawędzie_malejąco.sort(reverse=True)
@@ -70,10 +68,6 @@ class Graf:
             if(len(self.krawędzie_malejąco) > 1):
                 self.krawędzie_malejąco.pop(-1)
 
-    def wyzeruj_heurystykę(self):
-        for wierzchołek in self.wierzchołki.values():
-            wierzchołek.heurystyka = 0
-
     def a_star(self, id_start, id_celu):
         self.oblicz_heurystykę(id_celu)
         return self.algorytm(id_start, id_celu)
@@ -82,6 +76,8 @@ class Graf:
         return self.algorytm(id_start, id_celu)
 
     def algorytm(self, id_start, id_celu):
+        start = perf_counter()
+
         id_wierzchołków_do_sprawdzenia = [id_start]
         id_poprzednika = dict()
 
@@ -94,6 +90,8 @@ class Graf:
         koszt_do_celu = dict()
         for id_wierzchołka, wierzchołek in self.wierzchołki.items():
             koszt_do_celu[id_wierzchołka] = wierzchołek.heurystyka
+
+        odwiedzonych_wierzchołków = 0
         
         while(len(id_wierzchołków_do_sprawdzenia) != 0):
             id_aktualnego = id_wierzchołków_do_sprawdzenia[0]
@@ -102,8 +100,10 @@ class Graf:
                 if koszt_do_celu[id_wierzchołków_do_sprawdzenia[i]] < koszt_do_celu[id_aktualnego]:
                     id_aktualnego = id_wierzchołków_do_sprawdzenia[i]
 
-            if id_aktualnego == id_celu:
-                return self.ścieżka(id_poprzednika, id_aktualnego)
+            odwiedzonych_wierzchołków += 1
+
+            if id_aktualnego == id_celu or perf_counter() - start > 60:
+                return self.ścieżka(id_poprzednika, id_aktualnego), koszt_ze_startu[id_celu], odwiedzonych_wierzchołków, perf_counter() - start
             
             id_wierzchołków_do_sprawdzenia.remove(id_aktualnego)
 
@@ -118,7 +118,7 @@ class Graf:
                     if sąsiad not in id_wierzchołków_do_sprawdzenia:
                         id_wierzchołków_do_sprawdzenia.append(sąsiad)
 
-        return list()
+        return list(), -1, odwiedzonych_wierzchołków, perf_counter() - start
 
     def ścieżka(self, id_poprzednika, id_celu):
         odp = [id_celu]

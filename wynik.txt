@@ -1,0 +1,32 @@
+Plik graf10
+czas bruteforce: 0.1981393529986235, odwiedzono 219202 wierzcholki
+czas dijkstra: 2.4664999727974646e-05, odwiedzono 2 wierzcholki
+czas A*: 1.0712999937823042e-05, odwiedzono 2 wierzcholki
+
+Plik graf20
+czas bruteforce: 60.461903503999565, odwiedzono 32906715 wierzcholki (porażka)
+czas dijkstra: 9.332000081485603e-05, odwiedzono 20 wierzcholki
+czas A*: 6.758800009265542e-05, odwiedzono 20 wierzcholki
+
+Plik graf1000000
+czas dijkstra: 9.516728364998926, odwiedzono 1000000 wierzcholki
+czas A*: 9.063163521001115, odwiedzono 944405 wierzcholki
+
+Plik graf2000000
+czas dijkstra: 21.504375575999802, odwiedzono 1997896 wierzcholki
+czas A*: 20.716415228998812, odwiedzono 1885901 wierzcholki
+
+Plik graf3000000
+czas dijkstra: 35.90966760599986, odwiedzono 2999994 wierzcholki
+czas A*: 34.566799497999455, odwiedzono 2832370 wierzcholki
+
+Plik drzewo50000
+czas dijkstra: 53.72432488300001, odwiedzono 50000 wierzcholki
+czas A*: 0.016906974000448827, odwiedzono 16 wierzcholki
+
+Plik drzewo1000000
+czas dijkstra: 60.001616969999304, odwiedzono 35053 wierzcholki (porażka)
+czas A*: 0.3874293709995982, odwiedzono 20 wierzcholki
+
+Plik drzewo10000000
+czas A*: 5.387611696000022, odwiedzono 24 wierzcholki
