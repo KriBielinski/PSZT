@@ -126,3 +126,8 @@ class ID3_Tree:
                     print_children(inode, n+1)
                     
         print_children(self.root, 1)
+
+
+if __name__ == '__main__':
+    tree = ID3_Tree()
+    tree.print_structure()
