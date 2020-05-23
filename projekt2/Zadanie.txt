@@ -1,0 +1,5 @@
+Przewidywanie czy grzyb jest jadalny przy użyciu własnej implementacji algorytmu ID3. Testy tożsamościowe. Przed rozpoczęciem realizacji projektu proszę zapoznać się z zawartością strony.
+
+https://archive.ics.uci.edu/ml/datasets/mushroom
+
+http://staff.elka.pw.edu.pl/~rbiedrzy/PSZT/index.html
