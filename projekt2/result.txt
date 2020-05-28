@@ -1,0 +1,17 @@
+trained on: 812, correct: 0.49938448912597455
+
+trained on: 1624, correct: 0.4368364363748269
+
+trained on: 2437, correct: 0.769961308476961
+
+trained on: 3249, correct: 0.7316372589249077
+
+trained on: 4062, correct: 0.8197488303373553
+
+trained on: 4874, correct: 0.9827639273622654
+
+trained on: 5686, correct: 0.9786622897004513
+
+trained on: 6499, correct: 0.9901477832512315
+
+trained on: 7311, correct: 1.0

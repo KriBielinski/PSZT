@@ -3,11 +3,13 @@
 
 from data_input import DataReader
 from math import log2
+import sys
 
-data = DataReader('mushrooms/agaricus-lepiota.data')
+MUSHROOMS = 8124
+data = DataReader(MUSHROOMS, 'mushrooms/agaricus-lepiota.data')
 
 global_features = data.get_features()
-#labels = data.get_labels()
+global_labels = data.get_labels()
 
 def entropy(labels):
     label_count = len(labels)
@@ -107,8 +109,8 @@ class ID3_Node:
                 inode.generate_children()
             
 class ID3_Tree:
-    def __init__(self):
-        data = DataReader('mushrooms/agaricus-lepiota.data')
+    def __init__(self, lines):
+        data = DataReader(lines, 'mushrooms/agaricus-lepiota.data')
         self.features = data.get_features()
         self.labels = data.get_labels()
         self.root = ID3_Node(self.features, self.labels)
@@ -127,7 +129,25 @@ class ID3_Tree:
                     
         print_children(self.root, 1)
 
+    def classify(self, index):
+        root = self.root
+        while root.leaf == False:
+            for child in root.children:
+                if child.attr_value == global_features[root.attribute][index]:
+                    root = child
+                    break
+        return root.label
+
 
 if __name__ == '__main__':
-    tree = ID3_Tree()
-    tree.print_structure()
+    if len(sys.argv) > 1:
+        training_data = int(MUSHROOMS * int(sys.argv[1]) / 10)
+        tree = ID3_Tree(training_data)
+        j = training_data + 1
+        correct = 0
+        while j < MUSHROOMS:
+            if tree.classify(j) == global_labels[j]:
+                correct = correct + 1
+            j = j + 1
+        result = correct / (MUSHROOMS - (training_data + 1))
+        print("trained on: " + str(training_data) + ", correct: " + str(result))
