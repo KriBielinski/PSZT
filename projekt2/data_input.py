@@ -9,7 +9,7 @@ Created on Sat May 23 16:19:00 2020
 import pandas as pd
 
 class DataReader:
-    def __init__(self, lines, filepath=None):
+    def __init__(self, begin, end, begin2=0, end2=0, filepath=None):
         
         self._names = ['edible','cap-shape','cap-surface','cap-color',
          'bruises','odor','gill-attachment','gill-spacing','gill-size',
@@ -21,9 +21,9 @@ class DataReader:
         self._data = pd.read_csv(filepath, header=None, 
                                  index_col=False, names=self._names)
         
-        self._features = self._data.iloc[:lines,1:]
+        self._features = self._data.iloc[begin:end,1:].append(self._data.iloc[begin2:end2,1:])
         
-        self._labels = self._data.iloc[:lines,0]
+        self._labels = self._data.iloc[begin:end,0].append(self._data.iloc[begin2:end2,0])
         
     
     def get_features(self):
