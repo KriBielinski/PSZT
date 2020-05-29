@@ -84,13 +84,21 @@ class ID3_Node:
             self.label = self.labels.unique()[0]
             return
         
-        #if(self.features.empty):
-        #    self.leaf = True
-        #    self.label = self.labels.value_counts().idxmax()
-        #    return
+        #stop condition
+        if(self.features.empty):
+            self.leaf = True
+            self.label = self.labels.value_counts().idxmax()
+            return
             
         #generate children
         attr = best_attribute(self.features,self.labels,self.exclude)
+        
+        #stop condition
+        if(attr == ''):
+            self.leaf = True
+            self.label = self.labels.value_counts().idxmax()
+            return
+        
         self.exclude.append(attr)
         self.attribute = attr
         sub_features_tab, sub_labels_tab = divide_data(self.features,self.labels,attr)
@@ -113,7 +121,7 @@ class ID3_Tree:
         data = DataReader(lines, 'mushrooms/agaricus-lepiota.data')
         self.features = data.get_features()
         self.labels = data.get_labels()
-        self.root = ID3_Node(self.features, self.labels)
+        self.root = ID3_Node(self.features, self.labels, list())
         self.root.generate_children()
     
     def print_structure(self):
@@ -140,8 +148,20 @@ class ID3_Tree:
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
-        training_data = int(MUSHROOMS * int(sys.argv[1]) / 10)
+    #if len(sys.argv) > 1:
+    #    training_data = int(MUSHROOMS * int(sys.argv[1]) / 10)
+    #    tree = ID3_Tree(training_data)
+    #    j = training_data + 1
+    #    correct = 0
+    #    while j < MUSHROOMS:
+    #        if tree.classify(j) == global_labels[j]:
+    #            correct = correct + 1
+    #        j = j + 1
+    #    result = correct / (MUSHROOMS - (training_data + 1))
+    #    print("trained on: " + str(training_data) + ", correct: " + str(result))
+    
+    def do(p):
+        training_data = int(MUSHROOMS * p)
         tree = ID3_Tree(training_data)
         j = training_data + 1
         correct = 0
@@ -151,3 +171,6 @@ if __name__ == '__main__':
             j = j + 1
         result = correct / (MUSHROOMS - (training_data + 1))
         print("trained on: " + str(training_data) + ", correct: " + str(result))
+    
+    for i in [float((x+1)/100) for x in range(90)]:
+        do(i)
