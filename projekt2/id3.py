@@ -178,13 +178,13 @@ def test(tree, tests_begin, tests_end, results):
 if __name__ == '__main__':
     print("taking mushrooms from top of file as training data, rest as tests")
     results = {'training set' : [], 'tests' : [], 'correct' : [], 'incorrect' : [], 'false positives' : [], 'false negatives' : []}
-    for i in [float((x+1)/10) for x in range(9)]:
+    for i in [float((x+1)/100) for x in range(90)]:
         training_data = int(MUSHROOMS * i)
         tree = ID3_Tree(0, training_data)
         test(tree, training_data + 1, MUSHROOMS, results)
 
     data_frame = pandas.DataFrame(data=results)
-    data_frame.to_csv('results/results.csv')
+    data_frame.to_csv('results/results' + argv[1] + '.csv')
 
     print("cross validation - 3 iterations with 1/3 of mushrooms as tests")
     tests = int(MUSHROOMS / 3)
