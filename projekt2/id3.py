@@ -7,7 +7,7 @@ import pandas
 import sys
 
 MUSHROOMS = 8124
-data = DataReader(0, MUSHROOMS, 0, 0, 'mushrooms/agaricus-lepiota.data')
+data = DataReader(0, MUSHROOMS, 0, 0, sys.argv[2])
 
 global_features = data.get_features()
 global_labels = data.get_labels()
@@ -16,24 +16,24 @@ def entropy(labels):
     label_count = len(labels)
     proportion_e = len(labels[labels == 'e'])/label_count
     proportion_p = len(labels[labels == 'p'])/label_count
-    
+
     if(proportion_e == 0 or proportion_p == 0):
         #if all elements are of the same class then entropy = 0
         return 0
-    
+
     return -proportion_e*log2(proportion_e)-proportion_p*log2(proportion_p)
-    
+
 
 def inf_gain(features, labels, atribute):
     entropy_offset = entropy(labels)
-    
+
     for atribute_value in features[atribute].unique():
         labels_subset = labels[features[atribute]==atribute_value]
         subset_entropy = entropy(labels_subset)
         subset_proportion = len(labels_subset)/len(labels)
-        
+
         entropy_offset -= subset_proportion*subset_entropy
-    
+
     return entropy_offset
 
 # returnes the best attribute to divide the data on based on information gain
@@ -52,14 +52,14 @@ def best_attribute(features, labels, exclude_attributes=[]):
 def divide_data(features, labels, attribute):
     sub_features_tab = []
     sub_labels_tab = []
-    
+
     for attribute_value in global_features[attribute].unique():
         sub_features = features[features[attribute] == attribute_value]
         sub_labels = labels[features[attribute] == attribute_value]
-        
+
         sub_features_tab.append(sub_features)
         sub_labels_tab.append(sub_labels)
-    
+
     return sub_features_tab, sub_labels_tab
 
 class ID3_Node:
@@ -76,58 +76,58 @@ class ID3_Node:
         #czy ten node jest liściem drzewa i jeżeli tak to jakiej jest klasy
         self.leaf = False
         self.label = ''
-    
+
     def generate_children(self):
-        
+
         #stop condition
         if(len(self.labels.unique()) == 1):
             self.leaf = True
             self.label = self.labels.unique()[0]
             return
-        
+
         #stop condition
         if(self.features.empty):
             self.leaf = True
             self.label = self.labels.value_counts().idxmax()
             return
-            
+
         #generate children
         attr = best_attribute(self.features,self.labels,self.exclude)
-        
+
         #stop condition
         if(attr == ''):
             self.leaf = True
             self.label = self.labels.value_counts().idxmax()
             return
-        
+
         self.exclude.append(attr)
         self.attribute = attr
         sub_features_tab, sub_labels_tab = divide_data(self.features,self.labels,attr)
-        
+
         for i in range(len(sub_features_tab)):
-            
+
             inode = ID3_Node(sub_features_tab[i], sub_labels_tab[i], self.exclude)
             inode.attr_value = global_features[attr].unique()[i]
             self.children.append(inode)
-            
+
             #stop condition
             if(sub_features_tab[i].empty):
                 inode.leaf = True
                 inode.label = self.labels.value_counts().idxmax()
             else:
                 inode.generate_children()
-            
+
 class ID3_Tree:
     def __init__(self, begin, end, begin2=0, end2=0):
-        data = DataReader(begin, end, begin2, end2, 'mushrooms/agaricus-lepiota.data')
+        data = DataReader(begin, end, begin2, end2, sys.argv[2])
         self.features = data.get_features()
         self.labels = data.get_labels()
         self.root = ID3_Node(self.features, self.labels, list())
         self.root.generate_children()
-    
+
     def print_structure(self):
         print('switch(' + self.root.attribute+'):')
-        
+
         def print_children(root, n):
             for inode in root.children:
                 if(inode.leaf):
@@ -135,7 +135,7 @@ class ID3_Tree:
                 else:
                     print(n*'\t' + inode.attr_value + ': switch('+ inode.attribute+'):')
                     print_children(inode, n+1)
-                    
+
         print_children(self.root, 1)
 
     def classify(self, index):
@@ -172,7 +172,7 @@ def test(tree, tests_begin, tests_end, results):
     results['correct'].append(correct)
     results['incorrect'].append(incorrect)
     results['false positives'].append(false_positive)
-    results['false negatives'].append(false_negative) 
+    results['false negatives'].append(false_negative)
     return correct * 100 / tests
 
 if __name__ == '__main__':
@@ -184,7 +184,7 @@ if __name__ == '__main__':
         test(tree, training_data + 1, MUSHROOMS, results)
 
     data_frame = pandas.DataFrame(data=results)
-    data_frame.to_csv('results/results' + argv[1] + '.csv')
+    data_frame.to_csv('results/results' + sys.argv[1] + '.csv')
 
     print("cross validation - 3 iterations with 1/3 of mushrooms as tests")
     tests = int(MUSHROOMS / 3)
