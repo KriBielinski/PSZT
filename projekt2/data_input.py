@@ -31,4 +31,3 @@ class DataReader:
     
     def get_labels(self):
         return self._labels
-    
