@@ -161,25 +161,28 @@ def test(tree, tests_begin, tests_end, results):
         j = j + 1
 
     incorrect = false_positive + false_negative
+    correctness = correct * 100 / tests
+    training_set = MUSHROOMS - tests
 
-    print("trained on: " + str(MUSHROOMS - tests) + ", performed " + str(tests) + " tests")
-    print("\tcorrect: " + str(correct) + '/' + str(tests) + "({:.2f}".format(correct * 100 / tests) + "%)")
+    print("trained on: " + str(training_set) + ", performed " + str(tests) + " tests")
+    print("\tcorrect: " + str(correct) + '/' + str(tests) + "({:.2f}".format(correctness) + "%)")
     print("\tincorrect: " + str(incorrect) + "({:.2f}".format(incorrect * 100 / tests) + "%)")
     print("\t\tfalse positives: " + str(false_positive) + '/' + str(tests) + "({:.2f}".format(false_positive * 100 / tests) + "%)")
     print("\t\tfalse negatives: " + str(false_negative) + '/' + str(tests) + "({:.2f}".format(false_negative * 100 / tests) + "%)")
 
-    results['training set'].append(MUSHROOMS - tests)
+    results['training set'].append(training_set)
     results['tests'].append(tests)
     results['correct'].append(correct)
     results['incorrect'].append(incorrect)
     results['false positives'].append(false_positive)
     results['false negatives'].append(false_negative)
+    results['correctness'].append(correctness)
 
-    return correct * 100 / tests
+    return correctness
 
 if __name__ == '__main__':
     print("taking mushrooms from top of file as training data, rest as tests")
-    results = {'training set' : [], 'tests' : [], 'correct' : [], 'incorrect' : [], 'false positives' : [], 'false negatives' : []}
+    results = {'training set' : [], 'tests' : [], 'correct' : [], 'incorrect' : [], 'false positives' : [], 'false negatives' : [], 'correctness' : []}
 
     for i in [float((x+1)/100) for x in range(90)]:
         training_data = int(MUSHROOMS * i)

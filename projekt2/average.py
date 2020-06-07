@@ -5,7 +5,7 @@ lines = open('results/cross_validation.txt', "r").readlines()
 cross_validation = float(lines[0])
 
 i = 1
-while i < 10:
+while i < 25:
     average = average.add(pandas.read_csv('results/results' + str(i) + '.csv', index_col=0).iloc[:,:])
     cross_validation += float(lines[i])
     i += 1
